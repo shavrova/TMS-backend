@@ -19,7 +19,6 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.6.RELEASE</version>
         <relativePath/>
-        <!-- lookup parent from repository -->
     </parent>
     <properties>
         <java.version>11</java.version>
@@ -27,6 +26,8 @@
         <logtash-logback-encoder.version>6.4</logtash-logback-encoder.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <dockerhub.registry.path>registry.hub.docker.com/norik766</dockerhub.registry.path>
     </properties>
     <dependencies>
         <dependency>
@@ -56,6 +57,20 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${dockerfile-maven-plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
     <dependencyManagement>
         <dependencies>
             <dependency>
