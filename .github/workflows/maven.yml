@@ -16,4 +16,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean -Dmaven.test.skip=true install
       - name: Test config-service
+        env:
+          GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: mvn test  -pl config-service
