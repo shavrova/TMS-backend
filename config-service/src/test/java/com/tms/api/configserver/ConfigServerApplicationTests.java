@@ -32,7 +32,6 @@ class ConfigServerApplicationTests {
     @Test
     void whenRequestZuulProperties_thenResponseContainsPropertySourceField() {
         String response = new RestTemplate().getForObject("http://localhost:" + port + "zuul/default", String.class);
-        System.out.println("res: " + response);
         assertTrue(response.contains("\"spring.application.name\":\"zuul\""));
     }
 
