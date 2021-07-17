@@ -30,7 +30,7 @@ jobs:
           GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-        run: docker-compose up --build -d
+        run: docker-compose up --build --detach
       - name: Sleep for 1 min
         uses: juliangruber/sleep-action@v1
         with:
