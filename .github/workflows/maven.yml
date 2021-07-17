@@ -31,5 +31,11 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: docker-compose up --build -d
+      - name: Sleep for 1 min
+        uses: juliangruber/sleep-action@v1
+        with:
+          time: 60s
       - name: Check running containers
         run: docker ps -a
+      - name: Check rabbitmq container logs
+        run: docker logs rabbitmq
