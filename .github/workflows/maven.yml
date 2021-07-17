@@ -30,6 +30,6 @@ jobs:
           GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-        run: docker-compose up --build
+        run: docker-compose up --build -d
       - name: Check running containers
         run: docker ps -a
