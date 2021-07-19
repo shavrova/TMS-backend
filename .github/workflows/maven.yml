@@ -39,3 +39,5 @@ jobs:
         run: docker ps -a
       - name: Check rabbitmq container logs
         run: docker logs rabbitmq
+      - name: Sent curl
+        run: curl http://localhost:7001/discoveryservice/default
