@@ -34,7 +34,7 @@ jobs:
       - name: Sleep for 1 min
         uses: juliangruber/sleep-action@v1
         with:
-          time: 60s
+          time: 200s
       - name: Check running containers
         run: docker ps -a
       - name: Check rabbitmq container logs
