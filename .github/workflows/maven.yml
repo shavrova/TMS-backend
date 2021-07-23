@@ -39,5 +39,9 @@ jobs:
         run: docker ps -a
       - name: Check rabbitmq container logs
         run: docker logs rabbitmq
-      - name: Sent curl
-        run: curl http://localhost:7001/discoveryservice/default
+      - name: Check config-service container logs
+        run: docker logs config-service
+      - name: Test config-service integration
+        run: docker run --network container:config-service appropriate/curl -s --retry 10 --retry-connrefused http://localhost:7001/discoveryservice/default
+      - name: Check config-service container logs
+        run: docker logs config-service
