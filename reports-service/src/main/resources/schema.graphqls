@@ -1,0 +1,35 @@
+type Query {
+    report(id:String!): Report
+    test(id:String!):Test
+}
+
+type Report{
+    id:String!
+    status: String!
+    comment: String
+    attachment:Attachment
+    tests: [Test]!
+}
+
+type Failure{
+    failureId:String!
+    message: String!
+    stacktrace:String
+    screenshotPath:String
+    videoPath: String
+    test: Test!
+}
+type Test{
+    id:String!
+    name:String!
+    status:String!
+    failure: Failure
+}
+
+type Attachment{
+    id:String!
+    name:String!
+    description:String
+    path:String!
+    report:Report!
+}
