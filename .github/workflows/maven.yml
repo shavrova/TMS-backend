@@ -25,3 +25,23 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: mvn test  -pl config-service
+      - name: Build the docker-compose
+        env:
+          GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+        run: docker-compose up --build --detach
+      - name: Sleep for 1 min
+        uses: juliangruber/sleep-action@v1
+        with:
+          time: 200s
+      - name: Check running containers
+        run: docker ps -a
+      - name: Check rabbitmq container logs
+        run: docker logs rabbitmq
+      - name: Check config-service container logs
+        run: docker logs config-service
+      - name: Test config-service integration
+        run: docker run --network container:config-service appropriate/curl -s --retry 10 --retry-connrefused http://localhost:7001/discoveryservice/default
+      - name: Check config-service container logs
+        run: docker logs config-service
