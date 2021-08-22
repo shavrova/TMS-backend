@@ -24,7 +24,9 @@ jobs:
           GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-        run: mvn test  -pl config-service
+        run: mvn test -pl config-service
+      - name: Tests-service unit tests
+        run: mvn test -pl tests-service
       - name: Build the docker-compose
         env:
           GIT_REPO_URL: ${{ secrets.GIT_REPO_URL }}
