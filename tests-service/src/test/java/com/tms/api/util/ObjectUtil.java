@@ -7,7 +7,6 @@ import com.tms.api.data.entity.Step;
 import com.tms.api.model.feature.CreateFeatureRequest;
 import com.tms.api.model.feature.UpdateFeatureRequest;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -61,7 +60,7 @@ public class ObjectUtil {
                 .build();
     }
 
-    public static Scenario createScenarioObject(){
+    public static Scenario createScenarioObject() {
         return Scenario.builder()
                 .scenarioId(IdUtil.uuid())
                 .scenarioName(IdUtil.uuid())
@@ -73,19 +72,7 @@ public class ObjectUtil {
                 .build();
     }
 
-    public static Scenario createScenarioObjectWithStep(){
-        return Scenario.builder()
-                .scenarioId(IdUtil.uuid())
-                .scenarioName(IdUtil.uuid())
-                .scenarioDescription(IdUtil.uuid())
-                .createdAt(new Date())
-                .userId(IdUtil.uuid())
-                .feature(createFeatureObject())
-                .steps(Collections.singletonList(createStepObject()))
-                .build();
-    }
-
-    public static Step createStepObject(){
+    public static Step createStepObject() {
         return Step.builder()
                 .stepId(IdUtil.uuid())
                 .stepName(IdUtil.uuid())
@@ -96,8 +83,6 @@ public class ObjectUtil {
                 .build();
     }
 
-
-
     public static FeatureDto createFeatureDtoObject() {
         return FeatureDto.builder()
                 .featureId(IdUtil.uuid())
@@ -107,5 +92,4 @@ public class ObjectUtil {
                 .scenarios(Collections.emptyList())
                 .build();
     }
-
 }
