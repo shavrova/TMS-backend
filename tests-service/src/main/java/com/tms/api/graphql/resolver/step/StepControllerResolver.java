@@ -18,12 +18,5 @@ public class StepControllerResolver implements GraphQLQueryResolver {
 
     public StepDto getStep(String stepId) {
         return stepService.getById(stepId);
-//        return StepDto.builder()
-//                .stepId("id")
-//                .stepName("Name")
-//                .comment("comment")
-//                .createdAt(new Date())
-//                .updatedAt(new Date())
-//                .build();
     }
 }

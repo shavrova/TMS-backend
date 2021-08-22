@@ -21,5 +21,5 @@ public class FeatureResponse {
 
     private String className;
 
-    //private List<ScenarioResponse> scenarios;
+    private List<ScenarioResponse> scenarios;
 }
