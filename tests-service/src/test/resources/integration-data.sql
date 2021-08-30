@@ -20,4 +20,3 @@ INSERT INTO scenario_step (`scenario_id`, `step_id`) VALUES
 (1,3),
 (2,2),
 (2,3);
-
