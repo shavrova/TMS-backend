@@ -90,7 +90,7 @@ public class FeatureServiceTest {
 
 
     @Test
-    public void whenGetFeatureById_thenFeatureReturned(){
+    public void whenGetFeatureById_thenFeatureReturned() {
         when(featureRepository.findByFeatureId(any(String.class))).thenReturn(Optional.of(feature));
         FeatureDto retrieved = featureService.getById(featureDto.getFeatureId());
         assertThat(retrieved).isNotNull();
@@ -104,8 +104,4 @@ public class FeatureServiceTest {
         log.info("Feature dto : " + featureDto);
         return featureDto;
     }
-
-
-
-
 }
