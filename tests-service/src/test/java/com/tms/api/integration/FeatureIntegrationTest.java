@@ -1,11 +1,13 @@
 package com.tms.api.integration;
 
+import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.model.feature.CreateFeatureRequest;
 import com.tms.api.model.feature.FeatureResponse;
 import com.tms.api.model.feature.UpdateFeatureRequest;
 import com.tms.api.model.scenario.ScenarioResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -21,6 +23,9 @@ import static org.hamcrest.collection.IsMapContaining.hasKey;
 
 @Slf4j
 public class FeatureIntegrationTest extends BaseSetup {
+
+    @Autowired
+    private FeatureRepository featureRepository;
 
     @Test
     public void whenPostFeature_thenAllFieldsPresentInResponse() {
@@ -85,7 +90,6 @@ public class FeatureIntegrationTest extends BaseSetup {
     public void whenPostFeature_thenScenariosDoesNotUpdated() {
         FeatureResponse featureResponse = createFeatureWithScenario();
         UpdateFeatureRequest updateFeatureRequest = updateFeatureRequest(featureResponse.getFeatureId());
-
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -145,8 +149,6 @@ public class FeatureIntegrationTest extends BaseSetup {
                 .then()
                 .assertThat().statusCode(HttpStatus.OK.value());
     }
-
-
 }
 
 

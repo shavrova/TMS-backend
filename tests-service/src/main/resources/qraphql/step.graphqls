@@ -1,0 +1,13 @@
+type Step{
+    stepId:String!
+
+    stepName:String
+
+    comment:String
+
+    methodName:String
+
+    createdAt: String!
+
+    updatedAt: String!
+}

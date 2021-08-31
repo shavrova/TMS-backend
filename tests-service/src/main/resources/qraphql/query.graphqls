@@ -1,0 +1,4 @@
+type Query {
+    feature(id:String!): Feature!
+    step(id:String!): Step!
+}

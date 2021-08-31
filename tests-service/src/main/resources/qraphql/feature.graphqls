@@ -1,0 +1,15 @@
+type Feature{
+    featureId:String!
+
+    featureName:String!
+
+    featureDescription: String
+
+    className:String
+
+    #    scenarios: [Scenario]!
+}
+
+type Scenario{
+    scenarioId:String!
+}

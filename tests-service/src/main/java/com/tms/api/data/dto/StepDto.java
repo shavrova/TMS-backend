@@ -1,15 +1,18 @@
 package com.tms.api.data.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+import javax.persistence.NamedEntityGraph;
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
 @Setter
 @Getter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StepDto implements Serializable {
     private String stepId;
 
@@ -19,8 +22,8 @@ public class StepDto implements Serializable {
 
     private String methodName;
 
-    private Date CreatedAt;
+    private Date createdAt;
 
-    private Date UpdatedAt;
+    private Date updatedAt;
 
 }

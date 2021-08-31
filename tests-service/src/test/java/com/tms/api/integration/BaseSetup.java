@@ -17,8 +17,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -53,6 +56,7 @@ public class BaseSetup {
     String FEATURES_URL;
     String SCENARIOS_URL;
     String STEPS_URL;
+    HttpHeaders headers;
 
     @Autowired
     RestTemplateUtil restTemplateUtil;
@@ -61,12 +65,15 @@ public class BaseSetup {
     public void initRestAssured() {
         port = serverPort;
         baseURI = DEFAULT_URI;
-        basePath = "/tests-ws";
+        basePath = "";//"/tests-ws";
         FEATURES_URL = baseURI + ":" + port + basePath + "/features";
         SCENARIOS_URL = FEATURES_URL + "/scenarios";
         STEPS_URL = baseURI + ":" + port + basePath + "/steps";
         log.info("Constructing features URL:  FEATURES_URL = " + FEATURES_URL);
         filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("user-id", "1");
     }
 
 
@@ -89,7 +96,7 @@ public class BaseSetup {
                 .featureId(featureId)
                 .build();
         log.info("CreateScenarioRequest : " + createScenarioRequest);
-        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), ScenarioResponse.class);
+        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), headers, ScenarioResponse.class);
         log.info("ScenarioResponse : " + scenarioResponse);
         return scenarioResponse;
     }
@@ -125,6 +132,7 @@ public class BaseSetup {
         return featureResponse;
     }
 
+
     public ScenarioResponse createScenarioWithStep() {
         UpdateStepRequest updateStepRequest = UpdateStepRequest.builder()
                 .stepId(createStep().getStepId())
@@ -140,7 +148,7 @@ public class BaseSetup {
                 .steps(Collections.singletonList(updateStepRequest))
                 .build();
         log.info("CreateScenarioRequest : " + createScenarioRequest);
-        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), ScenarioResponse.class);
+        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), headers, ScenarioResponse.class);
         log.info("ScenarioResponse : " + scenarioResponse);
         return scenarioResponse;
     }
