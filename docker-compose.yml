@@ -1,0 +1,135 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.6.0-management
+    container_name: rabbitmq
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  mysql:
+    image: mysql:latest
+    container_name: users-mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: users_db-user
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: users_db
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+
+  postgres:
+    image: postgres:latest
+    container_name: tests-postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: testsdb
+      POSTGRES_USER: testsdb-user
+      POSTGRES_PASSWORD: test
+    volumes:
+      - postgres-database-data-volume:/var/lib/postgresql/data/
+
+  config-service:
+    image: norik766/tms-config-service
+    container_name: config-service
+    build:
+      context: ./config-service
+      dockerfile: Dockerfile
+    ports:
+      - 7001:7001
+    environment:
+      GIT_REPO_URL: ${GIT_REPO_URL}
+      GIT_USERNAME: ${GIT_USERNAME}
+      GIT_PASSWORD: ${GIT_PASSWORD}
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq:rabbitmq
+
+
+  discovery-service:
+    image: norik766/tms-discovery-service
+    container_name: discovery-service
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    ports:
+      - 7002:7002
+    depends_on:
+      - config-service
+    links:
+      - config-service:config-service
+      - rabbitmq:rabbitmq
+
+  gateway-service:
+    image: norik766/tms-gateway-service
+    container_name: gateway-service
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - 7003:7003
+    depends_on:
+      - discovery-service
+      - config-service
+    links:
+      - config-service:config-service
+      - discovery-service:discovery-service
+      - rabbitmq:rabbitmq
+
+  users-service:
+    image: norik766/tms-users-service
+    container_name: users-service
+    build:
+      context: ./users-service
+      dockerfile: Dockerfile
+    ports:
+      - 7004:7004
+    depends_on:
+      - discovery-service
+      - mysql
+      - config-service
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: users_db
+      RDS_USERNAME: users_db-user
+      RDS_PASSWORD: test
+      GATEWAY_HOST: gateway-service
+    links:
+      - gateway-service:gateway-service
+      - config-service:config-service
+      - discovery-service:discovery-service
+      - rabbitmq:rabbitmq
+
+  tests-service:
+    image: norik766/tms-tests-service
+    container_name: tests-service
+    build:
+      context: ./tests-service
+      dockerfile: Dockerfile
+    ports:
+      - 7005:7005
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: testsdb
+      POSTGRES_USER: testsdb-user
+      POSTGRES_PASSWORD: test
+    depends_on:
+      - postgres
+      - discovery-service
+      - config-service
+    links:
+      - config-service:config-service
+      - discovery-service:discovery-service
+      - rabbitmq:rabbitmq
+
+volumes:
+  mysql-database-data-volume:
+  postgres-database-data-volume:
