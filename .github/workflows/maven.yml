@@ -17,6 +17,21 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v20
+        with:
+          servers: >
+            [
+              {
+                "id": "registry.hub.docker.com",
+                "username": "${{ secrets.DOCKERHUB_USERNAME }}",
+                "password": "${{ secrets.DOCKERHUB_PASSWORD }}",
+                "configuration": {
+                  "email": "${{ secrets.DOCKERHUB_EMAIL }}",
+                }
+              }
+            ]
+          output_file: .m2/settings.xml
       - name: Build with Maven
         run: mvn clean -Dmaven.test.skip=true install
       - name: Test config-service
