@@ -72,9 +72,10 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <username>${dockerhub.username}</username>
+                    <password>${dockerhub.password}</password>
                     <repository>${dockerhub.registry.path}/${project.artifactId}</repository>
                     <tag>latest</tag>
-                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <skip>false</skip>
                 </configuration>
             </plugin>

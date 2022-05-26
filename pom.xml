@@ -30,7 +30,12 @@
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <junit.platform.surefire.provider>1.3.2</junit.platform.surefire.provider>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <dockerhub.registry.path>registry.hub.docker.com/norik766</dockerhub.registry.path>
+        <!--suppress UnresolvedMavenProperty -->
+        <dockerhub.registry.path>registry.hub.docker.com/${DOCKERHUB_USERNAME}</dockerhub.registry.path>
+        <!--suppress UnresolvedMavenProperty -->
+        <dockerhub.username>${DOCKERHUB_USERNAME}</dockerhub.username>
+        <!--suppress UnresolvedMavenProperty -->
+        <dockerhub.password>${DOCKERHUB_PASSWORD}</dockerhub.password>
         <lombok.version>1.18.20</lombok.version>
     </properties>
     <dependencies>
