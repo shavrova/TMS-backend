@@ -75,7 +75,7 @@
                     <repository>${dockerhub.registry.path}/${project.artifactId}</repository>
                     <tag>latest</tag>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                    <skip>false</skip>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
