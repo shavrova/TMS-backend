@@ -3,7 +3,6 @@ package com.tms.api.integration;
 import com.tms.api.TestServiceApplication;
 import com.tms.api.model.feature.CreateFeatureRequest;
 import com.tms.api.model.feature.FeatureResponse;
-import com.tms.api.model.feature.UpdateFeatureRequest;
 import com.tms.api.model.scenario.CreateScenarioRequest;
 import com.tms.api.model.scenario.ScenarioResponse;
 import com.tms.api.model.step.CreateStepRequest;
@@ -19,10 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.tms.api.util.ResourceUtil.asJsonString;
@@ -38,21 +38,18 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
  * @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT OR WebEnvironment.DEFINED_PORT),
  * spring will load a WebServerApplicationContext providing a real web environment.
  */
-
-
 @Slf4j
 @ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = TestServiceApplication.class)
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BaseSetup {
-
     @LocalServerPort
     int serverPort;
-
     String FEATURES_URL;
     String SCENARIOS_URL;
     String STEPS_URL;
+    HttpHeaders headers;
 
     @Autowired
     RestTemplateUtil restTemplateUtil;
@@ -61,12 +58,15 @@ public class BaseSetup {
     public void initRestAssured() {
         port = serverPort;
         baseURI = DEFAULT_URI;
-        basePath = "/tests-ws";
+        basePath = "";
         FEATURES_URL = baseURI + ":" + port + basePath + "/features";
         SCENARIOS_URL = FEATURES_URL + "/scenarios";
         STEPS_URL = baseURI + ":" + port + basePath + "/steps";
-        log.info("Constructing features URL:  FEATURES_URL = " + FEATURES_URL);
+        log.info("Constructing features URL:  FEATURES_URL = {}", FEATURES_URL);
         filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("user-id", "1");
     }
 
 
@@ -76,9 +76,9 @@ public class BaseSetup {
                 .comment(IdUtil.uuid())
                 .methodName(IdUtil.uuid())
                 .build();
-        log.info("CreateStepRequest : " + createStepRequest);
+        log.info("CreateStepRequest : {}", createStepRequest);
         StepResponse stepResponse = restTemplateUtil.create(STEPS_URL, asJsonString(createStepRequest), StepResponse.class);
-        log.info("StepResponse : " + stepResponse);
+        log.info("StepResponse : {}", stepResponse);
         return stepResponse;
     }
 
@@ -88,22 +88,9 @@ public class BaseSetup {
                 .scenarioDescription(IdUtil.uuid())
                 .featureId(featureId)
                 .build();
-        log.info("CreateScenarioRequest : " + createScenarioRequest);
-        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), ScenarioResponse.class);
-        log.info("ScenarioResponse : " + scenarioResponse);
-        return scenarioResponse;
-    }
-
-    public ScenarioResponse createScenario() {
-        FeatureResponse featureResponse = createFeature();
-        CreateScenarioRequest createScenarioRequest = CreateScenarioRequest.builder()
-                .scenarioName(IdUtil.uuid())
-                .scenarioDescription(IdUtil.uuid())
-                .featureId(featureResponse.getFeatureId())
-                .build();
-        log.info("CreateScenarioRequest : " + createScenarioRequest);
-        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), ScenarioResponse.class);
-        log.info("ScenarioResponse : " + scenarioResponse);
+        log.info("CreateScenarioRequest : {}", createScenarioRequest);
+        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), headers, ScenarioResponse.class);
+        log.info("ScenarioResponse : {}", scenarioResponse);
         return scenarioResponse;
     }
 
@@ -115,7 +102,7 @@ public class BaseSetup {
                 .build();
         log.info("CreateFeatureRequest : " + createFeatureRequest);
         FeatureResponse featureResponse = restTemplateUtil.create(FEATURES_URL, asJsonString(createFeatureRequest), FeatureResponse.class);
-        log.info("FeatureResponse : " + featureResponse);
+        log.info("FeatureResponse : {}", featureResponse);
         return featureResponse;
     }
 
@@ -132,16 +119,16 @@ public class BaseSetup {
                 .comment(IdUtil.uuid())
                 .methodName(IdUtil.uuid())
                 .build();
-        log.info("UpdateStepRequest : " + updateStepRequest);
+        log.info("UpdateStepRequest : {}", updateStepRequest);
         CreateScenarioRequest createScenarioRequest = CreateScenarioRequest.builder()
                 .scenarioName(IdUtil.uuid())
                 .scenarioDescription(IdUtil.uuid())
                 .featureId(createFeature().getFeatureId())
                 .steps(Collections.singletonList(updateStepRequest))
                 .build();
-        log.info("CreateScenarioRequest : " + createScenarioRequest);
-        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), ScenarioResponse.class);
-        log.info("ScenarioResponse : " + scenarioResponse);
+        log.info("CreateScenarioRequest : {}", createScenarioRequest);
+        ScenarioResponse scenarioResponse = restTemplateUtil.create(SCENARIOS_URL, asJsonString(createScenarioRequest), headers, ScenarioResponse.class);
+        log.info("ScenarioResponse : {}", scenarioResponse);
         return scenarioResponse;
     }
 }

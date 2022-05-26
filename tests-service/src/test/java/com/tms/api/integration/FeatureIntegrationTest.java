@@ -25,7 +25,6 @@ public class FeatureIntegrationTest extends BaseSetup {
     @Test
     public void whenPostFeature_thenAllFieldsPresentInResponse() {
         CreateFeatureRequest createFeatureRequest = createFeatureRequest();
-
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +44,6 @@ public class FeatureIntegrationTest extends BaseSetup {
     public void whenPutFeature_thenFieldsUpdated() {
         FeatureResponse featureResponse = createFeature();
         UpdateFeatureRequest updateFeatureRequest = updateFeatureRequest(featureResponse.getFeatureId());
-
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -85,7 +83,6 @@ public class FeatureIntegrationTest extends BaseSetup {
     public void whenPostFeature_thenScenariosDoesNotUpdated() {
         FeatureResponse featureResponse = createFeatureWithScenario();
         UpdateFeatureRequest updateFeatureRequest = updateFeatureRequest(featureResponse.getFeatureId());
-
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -145,8 +142,6 @@ public class FeatureIntegrationTest extends BaseSetup {
                 .then()
                 .assertThat().statusCode(HttpStatus.OK.value());
     }
-
-
 }
 
 

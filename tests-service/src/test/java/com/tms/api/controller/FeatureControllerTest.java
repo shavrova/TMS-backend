@@ -46,7 +46,6 @@ public class FeatureControllerTest {
     public void whenValidCreateFeatureRequestIsSend_thenFeatureResponseIsReturned() {
         CreateFeatureRequest createFeatureRequest = createFeatureRequest();
         FeatureDto featureDto = createFeatureDtoFromRequest(createFeatureRequest);
-
         when(featureService.create(any(FeatureDto.class))).thenReturn(featureDto);
         mockMvc.perform(post(Path.FEATURES)
                 .content(asJsonString(createFeatureRequest()))
@@ -67,8 +66,6 @@ public class FeatureControllerTest {
         CreateFeatureRequest createFeatureRequest = createFeatureRequest();
         createFeatureRequest.setFeatureName(null);
         FeatureDto featureDto = createFeatureDtoFromRequest(createFeatureRequest);
-        ;
-
         when(featureService.create(any(FeatureDto.class))).thenReturn(featureDto);
         mockMvc.perform(post(Path.FEATURES)
                 .content(asJsonString(createFeatureRequest))
@@ -83,7 +80,6 @@ public class FeatureControllerTest {
     public void whenValidUpdateFeatureRequestIsSend_thenSuccess() {
         UpdateFeatureRequest updateFeatureRequest = updateFeatureRequest();
         FeatureDto featureDto = createFeatureDtoFromRequest(updateFeatureRequest);
-
         when(featureService.create(any(FeatureDto.class))).thenReturn(featureDto);
         mockMvc.perform(post(Path.FEATURES)
                 .content(asJsonString(updateFeatureRequest))
@@ -133,5 +129,4 @@ public class FeatureControllerTest {
         featureDto.setScenarios(Collections.emptyList());
         return featureDto;
     }
-
 }
