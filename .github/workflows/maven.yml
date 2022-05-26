@@ -19,15 +19,19 @@ jobs:
           distribution: 'adopt'
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v20
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          DOCKERHUB_EMAIL: ${{ secrets.DOCKERHUB_EMAIL }}
         with:
           servers: >
             [
               {
                 "id": "registry.hub.docker.com",
-                "username": ${{ secrets.DOCKERHUB_USERNAME }},
-                "password": ${{ secrets.DOCKERHUB_PASSWORD }},
+                "username": "${DOCKERHUB_USERNAME}",
+                "password": "${DOCKERHUB_PASSWORD}"
                 "configuration": {
-                  "email": ${{ secrets.DOCKERHUB_EMAIL }}
+                  "email": "${DOCKERHUB_EMAIL}"
                 }
               }
             ]
