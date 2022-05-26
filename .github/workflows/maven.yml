@@ -24,10 +24,10 @@ jobs:
             [
               {
                 "id": "registry.hub.docker.com",
-                "username": "${env.DOCKERHUB_USERNAME}",
-                "password": "${env.DOCKERHUB_PASSWORD}",
+                "username": "${{secrets.DOCKERHUB_USERNAME}}",
+                "password": "${{secrets.DOCKERHUB_PASSWORD}}",
                 "configuration": {
-                  "email": "${env.DOCKERHUB_EMAIL}"
+                  "email": "${{secrets.DOCKERHUB_EMAIL}}"
                 }
               }
             ]
