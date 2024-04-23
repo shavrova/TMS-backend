@@ -15,18 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 @Component
 public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    JwtTokenUtils jwtTokenUtils;
+    private JwtTokenUtils jwtTokenUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        String token = jwtTokenUtils.resolveToken(request);
-
+        var token = jwtTokenUtils.resolveToken(request);
         try {
             if (token != null && jwtTokenUtils.validateToken(token)) {
                 Authentication auth = jwtTokenUtils.getAuthentication(token);
@@ -39,7 +36,5 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
-
-
     }
 }

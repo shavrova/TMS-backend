@@ -8,7 +8,7 @@ Backend contains of services:
 - gateway-service - routes requests to downstream services, validates request token
 - users-service - handles authorization, authentication and management users in the system
 - tests-service - handles test cases
-- export-service, export-service - todo
+- export-service, report-service - todo
 
 
 ## To run all services with docker compose locally:
@@ -55,7 +55,7 @@ export GIT_REPO_URL="https://github.com/shavrova/TMSConfigRepository" && export 
 
 5. Go to eureka service to check services status:
    `http://root:root@localhost:7002`
-6. To check user service send POST to `http://localhost:7003/users-service/api/register` to create user with body:
+6. To check user service send POST to `http://localhost:7003/api/users/register` to create user with body:
 
   ```
      {
@@ -67,7 +67,7 @@ export GIT_REPO_URL="https://github.com/shavrova/TMSConfigRepository" && export 
      }
 ```
 
-7. To get token send POST to `http://localhost:7003/users-service/api/login` with body:
+7. To get token send POST to `http://localhost:7003/api/users/login` with body:
 
 ```
 {
@@ -75,3 +75,4 @@ export GIT_REPO_URL="https://github.com/shavrova/TMSConfigRepository" && export 
     "password": "12345678"
 }
 ```
+8. To get feature send GET to `http://localhost:7003/api/tests/features` with header `Authorization: Bearer <token>`
