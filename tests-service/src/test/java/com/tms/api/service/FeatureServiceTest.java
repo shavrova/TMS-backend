@@ -20,7 +20,8 @@ import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
-import static com.tms.api.util.ObjectUtil.*;
+import static com.tms.api.util.ObjectUtil.createFeatureDtoObject;
+import static com.tms.api.util.ObjectUtil.createFeatureObject;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,17 +34,12 @@ import static org.mockito.Mockito.when;
 public class FeatureServiceTest {
     @Spy
     private ModelMapper mapper;
-
     @Mock
     private FeatureRepository featureRepository;
-
     @InjectMocks
     private FeatureServiceImpl featureService;
-
     private FeatureDto featureDto;
-
     private Feature feature;
-
 
     @BeforeEach
     public void beforeAll() {
@@ -68,7 +64,6 @@ public class FeatureServiceTest {
                 .hasMessageContaining("Feature name already exists. Please use another name.");
     }
 
-
     @Test
     public void whenUpdateFeature_andFeatureNameAlreadyExists_thenError() {
         when(featureRepository.findByFeatureName(anyString())).thenReturn(Optional.of(feature));
@@ -88,15 +83,13 @@ public class FeatureServiceTest {
         assertThat(featureDto).isEqualToComparingFieldByField(updated);
     }
 
-
     @Test
-    public void whenGetFeatureById_thenFeatureReturned(){
+    public void whenGetFeatureById_thenFeatureReturned() {
         when(featureRepository.findByFeatureId(any(String.class))).thenReturn(Optional.of(feature));
         FeatureDto retrieved = featureService.getById(featureDto.getFeatureId());
         assertThat(retrieved).isNotNull();
         assertThat(featureDto).isEqualToComparingFieldByField(retrieved);
     }
-
 
     private FeatureDto createFeatureDtoFromFeature(Feature feature) {
         log.info("Feature : " + feature);
@@ -104,8 +97,4 @@ public class FeatureServiceTest {
         log.info("Feature dto : " + featureDto);
         return featureDto;
     }
-
-
-
-
 }
